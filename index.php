@@ -67,7 +67,7 @@ while($row_fetch=mysqli_fetch_array($info)){
             
             $goals=$hold;
             echo "<tr>";
-            echo "<td>s".$gid."</td>";
+            echo "<td>g".$gid."</td>";
             echo"<td>".$goals."</td>";
             echo "</tr>";
 
@@ -77,7 +77,7 @@ while($row_fetch=mysqli_fetch_array($info)){
         else if($_POST['edit'.$gid]=='asismode'){
             
             echo "<tr>";
-            echo "<td>s".$gid."</td>";
+            echo "<td>g".$gid."</td>";
             echo"<td>".$goals."</td>";
             echo "</tr>";
         }
@@ -94,7 +94,7 @@ while($row_fetch=mysqli_fetch_array($info)){
         
         
         echo "<tr>";
-            echo "<td>s".$gid."</td>";
+            echo "<td>g".$gid."</td>";
             echo"<td>".$goals."</td>";
             echo "</tr>";
 
@@ -233,89 +233,125 @@ while($row_fetch=mysqli_fetch_array($info)) {
                 $find="SELECT * FROM SID_OID WHERE SID=$sid";
                 $look=$connection->query($find);
                 while($row_get=mysqli_fetch_array($look)){
-                    $found=$row_get['OID'];
-                    $find2="SELECT Objective_Statement FROM list_of_objectives WHERE $found=OID";
+                    
+                    $oid=$row_get['OID'];
+                    $find2="SELECT Objective_Statement FROM list_of_objectives WHERE $oid=OID";
                     $look2=$connection->query($find2);
                     echo "<tr>";   
-                     echo "<td>o".$found."</td>";
                      
-                    while($row_get2=mysqli_fetch_array($look2)){
-                        $found2=$row_get2['Objective_Statement'];
+                     
+                    $row_get2=mysqli_fetch_array($look2);
+                    $obj=$row_get2['Objective_Statement'];
                             
-                    }
-                    echo "<td>".$found2."</td>";
+                    if(isset($_POST['selected'.$oid])){
+                        
+                        if($_POST['selected'.$oid]=='updatemode'){
+                            //echo "hello";
+                            echo $box=$_POST['text'.$oid];
+                            echo $new = "UPDATE list_of_objectives SET Objective_Statement='".$box."' WHERE OID=".$oid;
+                            $connection->query($new);
+                            for($i=1;$i<10;$i++){
+                                if($_POST['g'.$i]=='on'){
+                                    //$vari=$_POST['g'.$i];
+                                    echo $new2="INSERT INTO OID_GID (OID,GID) VALUES (".$oid.",".$i.")";
+                                    $connection->query($new2);
+                                }
+                                
+                                    
+                                
 
-                    $find3="SELECT * FROM OID_GID WHERE $found=OID";
+                            }
+            
+                            $obj=$box;
+                            echo "<td>o".$oid."</td>";
+                            echo "<td>".$obj."</td>";
+                        }
+                        else if($_POST['selected'.$oid]=='asis'){
+            
+                            //echo "<tr>";
+                            echo "<td>o".$oid."</td>";
+                            echo"<td>".$obj."</td>";
+                            //echo "</tr>";
+                        }
+                        else if($_POST['selected'.$oid]=='del'){
+                            echo $sq3= "DELETE FROM SID_OID WHERE OID=".$oid." AND SID=$sid";
+                            $connection->query($sq3);
+                            
+
+                        }
+
+
+                    }
+                    
+                    
+                    else{
+                        //echo "nooooo ";
+                        echo "<td>o".$oid."</td>";
+                        echo "<td>".$obj."</td>";
+                    }
+
+                    $find3="SELECT * FROM OID_GID WHERE $oid=OID";
                     $look3=$connection->query($find3);
             
-                    
+                    $my_array=array();
                     while($row_get3=mysqli_fetch_array($look3)){
                         $found3=$row_get3['GID'];
                         if($found3==1){
-
-                            echo "<td>";
-                                echo "<p>&#10004;</p>";
-                                echo "</td>";
+                            array_push($my_array,$found3);
                         }
                         else if($found3==2){
-                            echo "<td>";
-                                echo "<p>&#10004;</p>";
-                                echo "</td>";
+                            array_push($my_array,$found3);
                         }
                         else if($found3==3){
-                            
-                            echo "<td>";
-                                echo "<p>&#10004;</p>";
-                                echo "</td>";
+                            array_push($my_array,$found3);
+                    
                         }
                         else if($found3==4){
-                            echo "<td>";
-                                echo "<p>&#10004;</p>";
-                                echo "</td>";
+                            array_push($my_array,$found3);
                         }
                         else if($found3==5){
-                            echo "<td>";
-                                echo "<p>&#10004;</p>";
-                                echo "</td>";
+                            array_push($my_array,$found3);
 
                         }
                         else if($found3==6){
-                            echo "<td>";
-                                echo "<p>&#10004;</p>";
-                                echo "</td>";
+                            array_push($my_array,$found3);
                         }
                         else if($found3==7){
-                            echo "<td>";
-                                echo "<p>&#10004;</p>";
-                                echo "</td>";
+                            array_push($my_array,$found3);
                         }
                         else if($found3==8){
-                            echo "<td>";
-                                echo "<p>&#10004;</p>";
-                                echo "</td>";
+                            array_push($my_array,$found3);
                         }
                         else if($found3==9){
-                            echo "<td>";
-                                echo "<p>&#10004;</p>";
-                                echo "</td>";
+                            array_push($my_array,$found3);
                         }
                         else if($found3==10){
-                            echo "<td>";
-                                echo "<p>&#10004;</p>";
-                                echo "</td>";
+                            array_push($my_array,$found3);
                         }
 
                         
-
                         
+                    }
+                    
+                    for($i=1;$i<10;$i++){
+                        if(in_array($i, $my_array)){
+                            echo "<td>";
+                                echo "<p>&#10004;</p>";
+                                echo "</td>";
+
+                        }
+                        else{
+                            echo "<td></td>";
+                        }
                     }
 
                     echo "</tr>";
 
                     
-                    echo "</tr>";
+                    
 
                 }
+                echo "</tr>";
 
             echo "</table>";
 
@@ -330,8 +366,9 @@ while($row_fetch=mysqli_fetch_array($info)) {
 }
 
 //finished table
-echo "</form>";
+
 echo "</table>";
+echo "</form>";
 
 
 

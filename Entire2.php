@@ -48,53 +48,61 @@
 		
 		while($row_fetch=mysqli_fetch_array($result)){
 			echo "<tr>";
-			$p=$row_fetch['OID'];
-			$query="SELECT Objective_Statement FROM list_of_objectives WHERE $p=OID";
+			$oid=$row_fetch['OID'];
+			$query="SELECT Objective_Statement FROM list_of_objectives WHERE $oid=OID";
 			$result2=$connection->query($query);
-			echo "<td>o".$p."</td>";
-
-			while($row_fetch2=mysqli_fetch_array($result2)){
-				$p2=$row_fetch2['Objective_Statement'];
-			}
-
-			
-			echo "<td><textarea name=bring".$p2." cols=85 row=15 maxlength=100>$p2</textarea></td>";
-
-			$query2="SELECT GID FROM OID_GID WHERE OID=$p";
+			echo "<td>o".$oid."</td>";
+			$row_fetch2=mysqli_fetch_array($result2);
+			$p2=$row_fetch2['Objective_Statement'];
+			echo "<td><textarea name=text".$oid." cols=85 row=15 maxlength=100>$p2</textarea></td>";
+			$query2="SELECT GID FROM OID_GID WHERE OID=$oid";
 			$result3=$connection->query($query2);
-			
 			
 			$arrayGID=array();
 			while($row_fetch3=mysqli_fetch_array($result3)){
-				
-				$p3=$row_fetch3['GID'];
-				array_push($arrayGID,$p3);
-				
-				
+				$gidx=$row_fetch3['GID'];
+				array_push($arrayGID,$gidx);
 			}
-			echo $arrayGID;
+			//echo $arrayGID;
 			echo "<td>";
-			print_r($arrayGID);
-			for($i=1;$i<11;$i++){
+			//print_r($arrayGID);
+			for($i=1;$i<10;$i++){
 
-				/*if(in_array($i, $arrayGID)){
-					echo $i;
-					echo "<input type=checkbox name=s".$i." checked>";
+				if(in_array($i, $arrayGID)){
+					//echo $i;
+					echo "<input type=checkbox name=g".$i." value=on checked>";
 
 				}
 				else{
-					echo "<input type=checkbox name=s".$i.">";
+					echo "<input type=checkbox name=g".$i." value=off>";
 
-				}*/
+				}
 			}
 
 			echo "</td>";
+
+			echo "<td>";
+			echo "<input type=radio name=selected".$oid." value=asis checked=checked>as-is";
+        	echo "<input type=radio name=selected".$oid." value=updatemode>update";
+        	echo "<input type=radio name=selected".$oid." value=del>delete";
+        	echo "</td>";
+
+			
+        	
+        
+		}
+
+		
+			
+		  	
+		  
+        
 
 
 			echo "</tr>"; 
 						
 
-		}
+		
 		
 		echo "</table>";
 		echo "</form>";		
@@ -105,3 +113,4 @@
 
 		?>
 	</body>
+	</html>

@@ -51,7 +51,7 @@ while($row_fetch=mysqli_fetch_array($info,MYSQLI_BOTH)) {
 
         
         echo "<tr>";
-        echo "<td>s".$gid."</td>";
+        echo "<td>g".$gid."</td>";
         echo "<td><textarea name=bring".$gid." cols=85 row=15 maxlength=100>$goals</textarea></td>";
 
 
